@@ -34,6 +34,8 @@ print(max_length_right)
 for country in countries:
     print(f"{country[0]}.{country[1]:<{max_length_left-10}} = {str(country[2]) + ",":>{max_length_right - 10}} {country[3]:<.2f}")
 
+file.close()
+
 
 
 
