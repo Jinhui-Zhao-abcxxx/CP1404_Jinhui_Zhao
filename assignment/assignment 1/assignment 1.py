@@ -32,17 +32,9 @@ def main():
 
         if user_input == "d":
 
-            max_length_name = max(get_max_length(0,visited_places),get_max_length(0,unvisited_places))
-            max_length_country = max(get_max_length(1,visited_places),get_max_length(1,unvisited_places))
+            display_all_places(unvisited_places, visited_places)
 
-            # print(max_length_name)
-            # print(max_length_country)
-            # this is used for testing
-
-            display_number = 0
-
-            display_places(display_number, max_length_country, max_length_name,unvisited_places,visited_places)
-
+            show_menu()
             user_input = input(">>>".lower())
 
         elif user_input == "r":
@@ -55,14 +47,18 @@ def main():
                 print("Not sure where to visit next?")
                 print(f"How about...  {unvisited_places[random_number][0]:>{len(unvisited_places[random_number][0])}} in {unvisited_places[random_number][1]:>{len(unvisited_places[random_number][1])}}?")
 
+            show_menu()
             user_input = input(">>>".lower())
 
         elif user_input == "a":
+
             new_place = []
-            is_pass = False
+
+
+
             new_name = check_blank("Name:")
             new_country = check_blank("Country:")
-            new_priority = check_if_valid(is_pass,"priority:")
+            new_priority = check_if_valid("priority:")
             new_place.append(new_name)
             new_place.append(new_country)
             new_place.append(new_priority)
@@ -70,10 +66,53 @@ def main():
             # print(new_place)
             # this is used for testing
 
+            unvisited_places.append(new_place)
+
+            show_menu()
             user_input = input(">>>".lower())
 
+        elif user_input == "m":
+            display_all_places(unvisited_places, visited_places)
 
-def check_if_valid(is_pass,promo):
+            print("Enter the number of a place to mark as visited")
+            mark_number = check_if_valid(">>>")
+            if mark_number > len(unvisited_places):
+                print(f"You have already visited {visited_places[mark_number - len(unvisited_places)]}")
+            else:
+                print(f"{unvisited_places[mark_number][0]:>{len(unvisited_places[mark_number][0])}} in {unvisited_places[mark_number][1]:>{len(unvisited_places[mark_number][1])}} visited! ")
+                unvisited_places[mark_number] = unvisited_places[mark_number][:-1] + "v"
+                visited_places.append(unvisited_places[mark_number])
+                unvisited_places.pop(unvisited_places[mark_number])
+
+            show_menu()
+            user_input = input(">>>".lower())
+
+        else:
+            print("Invalid menu choice")
+
+
+
+
+
+def display_all_places(unvisited_places, visited_places):
+    max_length_country, max_length_name = get_display_length(unvisited_places, visited_places)
+
+    # print(max_length_name)
+    # print(max_length_country)
+    # this is used for testing
+
+    display_places(max_length_country, max_length_name, unvisited_places, visited_places)
+
+    print(f"{len(visited_places) + len(unvisited_places)} places tracked. You still want to visit {len(unvisited_places)} places.")
+
+def get_display_length(unvisited_places, visited_places):
+    max_length_name = max(get_max_length(0, visited_places), get_max_length(0, unvisited_places))
+    max_length_country = max(get_max_length(1, visited_places), get_max_length(1, unvisited_places))
+    return max_length_country, max_length_name
+
+
+def check_if_valid(promo):
+    is_pass = False
 
     while not is_pass:
         try:
@@ -97,7 +136,9 @@ def check_blank(promo):
     return new_thing
 
 
-def display_places(display_number, max_length_country, max_length_name,unvisited_places,visited_places,):
+def display_places(max_length_country, max_length_name,unvisited_places,visited_places,):
+
+    display_number = 0
 
     for place in unvisited_places:
         display_number += 1
