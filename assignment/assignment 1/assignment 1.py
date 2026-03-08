@@ -10,18 +10,20 @@ MENU = "Menu: \nD - Display all places \nR - Recommend a random place \nA - Add 
 def main():
     print("Travel Tracker 1.0 - by Jinhui.Zhao")
     original_places = read_csv()
-    cleaned_places = []
-    for place in original_places:
-        cleaned_places.append(place[:-3])
-
-
-
-
-    print(cleaned_places)
+    # print(original_places)    """this is used for testing"""
+    cleaned_places = clean_data(original_places)
+    # print(cleaned_places)    """this is used for testing"""
+    print(f"{len(cleaned_places)} places loaded from places.csv")
     show_menu()
 
 
-def read_csv() -> list[str]:
+def clean_data(original_places):
+    cleaned_places = []
+    for place_info in original_places:
+        cleaned_places.append(place_info[:-3].split(","))
+    return cleaned_places
+
+def read_csv():
     places_file = open("places.csv", "r")
     original_places = places_file.readlines()
     places_file.close()
