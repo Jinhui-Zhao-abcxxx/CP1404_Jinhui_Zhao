@@ -11,15 +11,22 @@ MENU = "Menu: \nD - Display all places \nR - Recommend a random place \nA - Add 
 
 def main():
     print("Travel Tracker 1.0 - by Jinhui.Zhao")
+
     original_places = read_csv()
+
     # print(original_places)
     # this is used for testing
+
     visited_places,unvisited_places = clean_data(original_places)
-    print(visited_places)
-    print(unvisited_places)
+
+    # print(visited_places)
+    # print(unvisited_places)
     # this is used for testing
+
     print(f"{len(original_places)} places loaded from places.csv")
+
     show_menu()
+
     user_input = input(">>>".lower())
     while user_input != "q":
         if user_input == "d":
@@ -27,8 +34,8 @@ def main():
             max_length_name = max(get_max_length(0,visited_places),get_max_length(0,unvisited_places))
             max_length_country = max(get_max_length(1,visited_places),get_max_length(1,unvisited_places))
 
-            print(max_length_name)
-            print(max_length_country)
+            # print(max_length_name)
+            # print(max_length_country)
             # this is used for testing
 
             display_number = 0
@@ -37,8 +44,21 @@ def main():
 
             user_input = input(">>>".lower())
 
+        elif user_input == "r":
+
+            if len(unvisited_places) == 0:
+                print("No places left to visit!")
+
+            else:
+                random_number = random.randint(0,len(unvisited_places) - 1)
+                print("Not sure where to visit next?")
+                print(f"How about...  {unvisited_places[random_number][0]:>{len(unvisited_places[random_number][0])}} in {unvisited_places[random_number][1]:>{len(unvisited_places[random_number][1])}}?")
+
+            user_input = input(">>>".lower())
+
 
 def display_places(display_number, max_length_country, max_length_name,unvisited_places,visited_places,):
+
     for place in unvisited_places:
         display_number += 1
         print(f"*{display_number}. {place[0]:<{max_length_name}} in {place[1]:<{max_length_country}} {place[2]}")
