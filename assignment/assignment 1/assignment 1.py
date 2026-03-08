@@ -10,6 +10,8 @@ MENU = "Menu: \nD - Display all places \nR - Recommend a random place \nA - Add 
 
 
 def main():
+    """program to track places they wish to visit
+        and places they have already visited."""
     print("Travel Tracker 1.0 - by Jinhui.Zhao")
 
     original_places = read_csv()
@@ -124,6 +126,7 @@ def main():
 
 
 def write_file(new_file, list_of_places):
+    """input current data into .csv file"""
     for place in list_of_places:
         new_line = ""
         for place_info in place:
@@ -134,6 +137,7 @@ def write_file(new_file, list_of_places):
 
 
 def display_all_places(unvisited_places, visited_places):
+    """ list of all the places with their details and the number of places left to visit."""
     max_length_country, max_length_name = get_display_length(unvisited_places, visited_places)
 
     # print(max_length_name)
@@ -145,12 +149,14 @@ def display_all_places(unvisited_places, visited_places):
     print(f"{len(visited_places) + len(unvisited_places)} places tracked. You still want to visit {len(unvisited_places)} places.")
 
 def get_display_length(unvisited_places, visited_places):
+    """get max length for name and country for formatting"""
     max_length_name = max(get_max_length(0, visited_places), get_max_length(0, unvisited_places))
     max_length_country = max(get_max_length(1, visited_places), get_max_length(1, unvisited_places))
     return max_length_country, max_length_name
 
 
 def check_if_valid(promo):
+    """check is input greater than 0 abd not invalid"""
     is_pass = False
 
     while not is_pass:
@@ -168,6 +174,7 @@ def check_if_valid(promo):
 
 
 def check_blank(promo):
+    """check if user input a blank"""
     new_thing = input(promo)
     while new_thing == "":
         print("Input can not be blank")
@@ -176,6 +183,7 @@ def check_blank(promo):
 
 
 def display_places(max_length_country, max_length_name,unvisited_places,visited_places,):
+    """display the list and number of places"""
 
     display_number = 0
 
@@ -190,6 +198,7 @@ def display_places(max_length_country, max_length_name,unvisited_places,visited_
 
 
 def clean_data(original_places):
+    """make data clean and ready for code to use"""
     visited_places = []
     unvisited_places = []
     for place_info in original_places:
@@ -204,11 +213,13 @@ def clean_data(original_places):
 
 
 def sort_places(unvisited_places):
+    """sort unvisited places list to needed format"""
     unvisited_places.sort(key=itemgetter(3))
     unvisited_places.reverse()
 
 
 def read_csv():
+    """read a file and store it's content in a variable"""
     places_file = open("places.csv", "r")
     original_places = places_file.readlines()
     places_file.close()
@@ -216,9 +227,11 @@ def read_csv():
 
 
 def show_menu():
+    """display menu"""
     print(MENU)
 
 def get_max_length(position,places_list):
+    """get max length of a place name or country"""
     measuring_list = []
     for place in places_list:
         measuring_list.append(len(place[position]))
