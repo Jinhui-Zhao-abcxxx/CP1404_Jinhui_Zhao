@@ -67,6 +67,7 @@ def main():
             # this is used for testing
 
             unvisited_places.append(new_place)
+            sort_places(unvisited_places)
 
             show_menu()
             user_input = input(">>>".lower())
@@ -83,6 +84,7 @@ def main():
                 unvisited_places[mark_number] = unvisited_places[mark_number][:-1] + "v"
                 visited_places.append(unvisited_places[mark_number])
                 unvisited_places.pop(unvisited_places[mark_number])
+                sort_places(unvisited_places)
 
             show_menu()
             user_input = input(">>>".lower())
@@ -90,8 +92,19 @@ def main():
         else:
             print("Invalid menu choice")
 
+    new_file = open("places.csv","w")
+    write_file(new_file, unvisited_places)
+    write_file(new_file, visited_places)
+    new_file.close()
+    print(f"{len(unvisited_places) + len(visited_places)} places saved to places.csv ")
+    print("Have a nice day :)")
 
 
+def write_file(new_file, list_of_places):
+    for place in list_of_places:
+        for place_info in place:
+            print(place_info, end=",", file=new_file)
+        print("",file=new_file)
 
 
 def display_all_places(unvisited_places, visited_places):
@@ -159,10 +172,15 @@ def clean_data(original_places):
         else:
             visited_places.append(place_info[:-1].split(","))
 
-    unvisited_places.sort(key = itemgetter(2))
-    unvisited_places.reverse()
+    sort_places(unvisited_places)
 
     return visited_places,unvisited_places
+
+
+def sort_places(unvisited_places):
+    unvisited_places.sort(key=itemgetter(2))
+    unvisited_places.reverse()
+
 
 def read_csv():
     places_file = open("places.csv", "r")
