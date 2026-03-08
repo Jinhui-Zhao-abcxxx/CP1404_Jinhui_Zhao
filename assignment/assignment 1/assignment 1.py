@@ -29,6 +29,7 @@ def main():
 
     user_input = input(">>>".lower())
     while user_input != "q":
+
         if user_input == "d":
 
             max_length_name = max(get_max_length(0,visited_places),get_max_length(0,unvisited_places))
@@ -55,6 +56,45 @@ def main():
                 print(f"How about...  {unvisited_places[random_number][0]:>{len(unvisited_places[random_number][0])}} in {unvisited_places[random_number][1]:>{len(unvisited_places[random_number][1])}}?")
 
             user_input = input(">>>".lower())
+
+        elif user_input == "a":
+            new_place = []
+            is_pass = False
+            new_name = check_blank("Name:")
+            new_country = check_blank("Country:")
+            new_priority = check_if_valid(is_pass,"priority:")
+            new_place.append(new_name)
+            new_place.append(new_country)
+            new_place.append(new_priority)
+
+            # print(new_place)
+            # this is used for testing
+
+            user_input = input(">>>".lower())
+
+
+def check_if_valid(is_pass,promo):
+
+    while not is_pass:
+        try:
+            new_thing = int(input(promo))
+
+            if new_thing <= 0:
+                print("Number must be > 0")
+            else:
+                is_pass = True
+        except ValueError:
+            print("Invalid input; enter a valid number")
+
+    return new_thing
+
+
+def check_blank(promo):
+    new_thing = input(promo)
+    while new_thing == "":
+        print("Input can not be blank")
+        new_thing = input(promo)
+    return new_thing
 
 
 def display_places(display_number, max_length_country, max_length_name,unvisited_places,visited_places,):
