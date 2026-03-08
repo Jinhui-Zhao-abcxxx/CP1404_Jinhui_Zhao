@@ -19,15 +19,15 @@ def main():
 
     visited_places,unvisited_places = clean_data(original_places)
 
-    # print(visited_places)
-    # print(unvisited_places)
+    print(visited_places)
+    print(unvisited_places)
     # this is used for testing
 
     print(f"{len(original_places)} places loaded from places.csv")
 
     show_menu()
 
-    user_input = input(">>>".lower())
+    user_input = input(">>>").lower()
     while user_input != "q":
 
         if user_input == "d":
@@ -35,7 +35,7 @@ def main():
             display_all_places(unvisited_places, visited_places)
 
             show_menu()
-            user_input = input(">>>".lower())
+            user_input = input(">>>").lower()
 
         elif user_input == "r":
 
@@ -48,7 +48,7 @@ def main():
                 print(f"How about...  {unvisited_places[random_number][0]:>{len(unvisited_places[random_number][0])}} in {unvisited_places[random_number][1]:>{len(unvisited_places[random_number][1])}}?")
 
             show_menu()
-            user_input = input(">>>".lower())
+            user_input = input(">>>").lower()
 
         elif user_input == "a":
 
@@ -58,10 +58,11 @@ def main():
 
             new_name = check_blank("Name:")
             new_country = check_blank("Country:")
-            new_priority = check_if_valid("priority:")
+            new_priority = int(check_if_valid("priority:"))
             new_place.append(new_name)
             new_place.append(new_country)
             new_place.append(new_priority)
+            new_place.append("n")
 
             # print(new_place)
             # this is used for testing
@@ -69,28 +70,50 @@ def main():
             unvisited_places.append(new_place)
             sort_places(unvisited_places)
 
+            print(f"{new_name:>{len(new_name)}} in {new_country:>{len(new_country)}} (priority {new_priority}) added to Travel Tracker.")
             show_menu()
-            user_input = input(">>>".lower())
+            user_input = input(">>>").lower()
 
         elif user_input == "m":
-            display_all_places(unvisited_places, visited_places)
 
-            print("Enter the number of a place to mark as visited")
-            mark_number = check_if_valid(">>>")
-            if mark_number > len(unvisited_places):
-                print(f"You have already visited {visited_places[mark_number - len(unvisited_places)]}")
+            if len(unvisited_places) == 0:
+                print("No places left to visit!")
+
             else:
-                print(f"{unvisited_places[mark_number][0]:>{len(unvisited_places[mark_number][0])}} in {unvisited_places[mark_number][1]:>{len(unvisited_places[mark_number][1])}} visited! ")
-                unvisited_places[mark_number] = unvisited_places[mark_number][:-1] + "v"
-                visited_places.append(unvisited_places[mark_number])
-                unvisited_places.pop(unvisited_places[mark_number])
-                sort_places(unvisited_places)
+                display_all_places(unvisited_places, visited_places)
+
+                print("Enter the number of a place to mark as visited")
+                mark_number = check_if_valid(">>>")
+
+
+
+                is_pass = False
+
+                while not is_pass:
+
+                    if mark_number > len(unvisited_places) + len(visited_places):
+                        print("Invalid place number")
+                        mark_number = check_if_valid(">>>")
+                    elif mark_number > len(unvisited_places):
+                        mark_number -= 1
+                        print(f"You have already visited {visited_places[mark_number - len(unvisited_places)][0]:>{len(visited_places[mark_number - len(unvisited_places)][0])}} in {visited_places[mark_number - len(unvisited_places)][1]:>{len(visited_places[mark_number - len(unvisited_places)][1])}}")
+                        is_pass = True
+                    else:
+                        mark_number -= 1
+                        print(f"{unvisited_places[mark_number][0]:>{len(unvisited_places[mark_number][0])}} in {unvisited_places[mark_number][1]:>{len(unvisited_places[mark_number][1])}} visited! ")
+                        unvisited_places[mark_number][-1] = "v"
+                        visited_places.append(unvisited_places[mark_number])
+                        unvisited_places.pop(mark_number)
+                        sort_places(unvisited_places)
+                        is_pass = True
 
             show_menu()
-            user_input = input(">>>".lower())
+            user_input = input(">>>").lower()
 
         else:
             print("Invalid menu choice")
+            show_menu()
+            user_input = input(">>>").lower()
 
     new_file = open("places.csv","w")
     write_file(new_file, unvisited_places)
@@ -102,16 +125,19 @@ def main():
 
 def write_file(new_file, list_of_places):
     for place in list_of_places:
+        new_line = ""
         for place_info in place:
-            print(place_info, end=",", file=new_file)
-        print("",file=new_file)
+            new_line += place_info
+            new_line += ","
+        print(new_line[:-1],file=new_file)
+
 
 
 def display_all_places(unvisited_places, visited_places):
     max_length_country, max_length_name = get_display_length(unvisited_places, visited_places)
 
-    # print(max_length_name)
-    # print(max_length_country)
+    print(max_length_name)
+    print(max_length_country)
     # this is used for testing
 
     display_places(max_length_country, max_length_name, unvisited_places, visited_places)
@@ -159,7 +185,7 @@ def display_places(max_length_country, max_length_name,unvisited_places,visited_
 
     for place in visited_places:
         display_number += 1
-        print(f"{display_number}. {place[0]:<{max_length_name}} in {place[1]:<{max_length_country}} {place[2]}")
+        print(f" {display_number}. {place[0]:<{max_length_name}} in {place[1]:<{max_length_country}} {place[2]}")
 
 
 
@@ -178,7 +204,7 @@ def clean_data(original_places):
 
 
 def sort_places(unvisited_places):
-    unvisited_places.sort(key=itemgetter(2))
+    unvisited_places.sort(key=itemgetter(3))
     unvisited_places.reverse()
 
 
@@ -195,8 +221,8 @@ def show_menu():
 def get_max_length(position,places_list):
     measuring_list = []
     for place in places_list:
-        measuring_list.append(place[position])
-    return len(max(measuring_list))
+        measuring_list.append(len(place[position]))
+    return max(measuring_list)
 
 
 
