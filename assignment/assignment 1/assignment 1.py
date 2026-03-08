@@ -19,8 +19,8 @@ def main():
 
     visited_places,unvisited_places = clean_data(original_places)
 
-    print(visited_places)
-    print(unvisited_places)
+    # print(visited_places)
+    # print(unvisited_places)
     # this is used for testing
 
     print(f"{len(original_places)} places loaded from places.csv")
@@ -136,8 +136,8 @@ def write_file(new_file, list_of_places):
 def display_all_places(unvisited_places, visited_places):
     max_length_country, max_length_name = get_display_length(unvisited_places, visited_places)
 
-    print(max_length_name)
-    print(max_length_country)
+    # print(max_length_name)
+    # print(max_length_country)
     # this is used for testing
 
     display_places(max_length_country, max_length_name, unvisited_places, visited_places)
@@ -223,9 +223,6 @@ def get_max_length(position,places_list):
     for place in places_list:
         measuring_list.append(len(place[position]))
     return max(measuring_list)
-
-
-
 
 
 main()
