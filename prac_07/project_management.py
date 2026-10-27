@@ -212,13 +212,6 @@ def main():
     print("Thank you for using custom-built project management software.")
 
 
-
-
-
-
-
-
-
 main()
 
 
